@@ -23,7 +23,7 @@ export class InvoiceComponent implements OnInit {
       worker.id = i;
       worker.name = `my name is ${i}`;
       worker.itemsA = [];
-      for (let j = 0; j < 40; j++) {
+      for (let j = 0; j < 10; j++) {
         const item = new WorkerItem();
         item.description = `item ${i}-${j}`;
         item.id = (i * 100) + j;
