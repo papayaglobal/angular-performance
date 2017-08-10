@@ -6,8 +6,8 @@ import { WorkerItem } from './worker-item';
 @Component({
   selector: 'app-invoice',
   template: `
-  <div *ngFor="let worker of workers;">
-    <app-worker [worker]="worker" (workerChanged)="onWorkerChanged($event)"></app-worker>
+  <div *ngFor="let worker of workers; trackBy: trackByWorkerId;">
+    <app-worker [worker]="worker" (workerChanged)="onWorkerChanged($event)" (itemChanged)="onItemChanged($event)"></app-worker>
   </div>
   `
 })
@@ -23,7 +23,7 @@ export class InvoiceComponent implements OnInit {
       worker.id = i;
       worker.name = `my name is ${i}`;
       worker.itemsA = [];
-      for (let j = 0; j < 10; j++) {
+      for (let j = 0; j < 40; j++) {
         const item = new WorkerItem();
         item.description = `item ${i}-${j}`;
         item.id = (i * 100) + j;
@@ -40,5 +40,17 @@ export class InvoiceComponent implements OnInit {
     let workers = _.cloneDeep(this.workers);
     workers.splice(workerIndex, 1, worker);
     this.workers = [...workers];
+  }
+
+  public trackByWorkerId(index: number, worker: Worker) {
+    return worker.id;
+  }
+
+  public onItemChanged(event: {workerId: number, item: WorkerItem}) {
+    const worker = this.workers.find(_worker => _worker.id === event.workerId);
+    let items = _.cloneDeep(worker.itemsA);
+    const itemIndex = items.findIndex(item => item.id === event.item.id);
+    items.splice(itemIndex, 1, event.item);
+    worker.itemsA = items;
   }
 }
