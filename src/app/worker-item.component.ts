@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs/Observable';
-import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import * as _ from 'lodash';
 import { NgRedux, select } from '@angular-redux/store';
 
@@ -16,7 +16,8 @@ import { Worker } from './worker';
       <label>{{item?.id}}</label>
       <input [ngModel]="item?.description" (ngModelChange)="onDescChange($event)">
     </div>
-  `
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class WorkerItemComponent implements OnInit {

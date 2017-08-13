@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import * as _ from 'lodash';
 import { NgRedux, select } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
@@ -14,7 +14,8 @@ import { AppState } from './app-state';
   <div *ngFor="let workerId of workers$ | async; trackBy: trackByWorkerId;">
     <app-worker [workerId]="workerId"></app-worker>
   </div>
-  `
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class InvoiceComponent implements OnInit {
@@ -22,15 +23,15 @@ export class InvoiceComponent implements OnInit {
   public workers$: Observable<number[]>;
 
   constructor(private ngRedux: NgRedux<AppState>, workerActions: WorkerActions) {
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 200; i++) {
       const worker = new Worker;
       worker.id = i;
       worker.name = `my name is ${i}`;
       worker.items = [];
-      for (let j = 0; j < 100; j++) {
+      for (let j = 0; j < 200; j++) {
         const item = new WorkerItem();
         item.description = `item ${i}-${j}`;
-        item.id = (i * 100) + j;
+        item.id = (i * 200) + j;
         item.value = _.random(1, 1000);
         worker.items.push(item);
       }

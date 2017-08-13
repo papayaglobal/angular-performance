@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs/Observable';
 import { NgRedux } from '@angular-redux/store';
-import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import * as _ from 'lodash';
 import 'rxjs/add/operator/do';
 
@@ -21,7 +21,8 @@ import { WorkerActions } from './worker.actions';
       <app-worker-item [workerId]="worker.id" [itemId]="item.id"></app-worker-item>
       </div>
   </div>
-  `
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class WorkerComponent implements OnInit {
