@@ -1,7 +1,10 @@
 import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import * as _ from 'lodash';
+import { NgRedux, select } from "@angular-redux/store";
 
 import { WorkerItem } from './worker-item';
+import { WorkerActions, SetItemDescriptionPayload } from "./worker.actions";
+import { AppState } from './app-state';
 
 @Component({
   selector: 'app-worker-item',
@@ -23,22 +26,21 @@ import { WorkerItem } from './worker-item';
 
 export class WorkerItemComponent implements OnInit {
 
+  @Input() public workerId: number;
+
   @Input()
   public set items(_items: WorkerItem[]) {
     this._items = _.cloneDeep(_items);
   }
 
-  @Output() public itemChanged = new EventEmitter<WorkerItem>();
-
   public _items: WorkerItem[];
 
-  constructor() { }
+  constructor(private ngRedux: NgRedux<AppState>, private workerActions: WorkerActions) { }
 
   ngOnInit() { }
 
   public onDescChange(itemId: number, desc: string) {
-    const item = _.find(this._items, item => item.id === itemId);
-    this.itemChanged.emit(Object.assign({}, item, { description: desc }));
+    this.workerActions.setItemDescription(this.workerId, itemId, desc);
   }
 
   public trackByITemId(index: number, item: WorkerItem) {
