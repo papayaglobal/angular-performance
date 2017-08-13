@@ -17,7 +17,9 @@ import { WorkerActions } from './worker.actions';
       <label>Id: {{worker.id}}</label>
       <label>Name</label>
       <input type="" [ngModel]="worker.name" (ngModelChange)="onNameChange($event)">
-      <app-worker-item [workerId]="worker.id" [items]="worker.items"></app-worker-item>
+      <div *ngFor="let item of worker.items; trackBy: trackByITemId">
+      <app-worker-item [workerId]="worker.id" [itemId]="item.id"></app-worker-item>
+      </div>
   </div>
   `
 })
@@ -34,11 +36,10 @@ export class WorkerComponent implements OnInit {
         .distinctUntilChanged((workerA: Worker, workerB: Worker) => {
           return !!workerA
             && !!workerB
-            && workerA.name === workerB.name
-            && _.isEmpty(_.difference(workerA.items, workerB.items));
+            && workerA.name === workerB.name;
         })
         .do((worker: Worker) => {
-          console.log('has change', _workerId);
+          console.log('worker change', _workerId);
           this.worker = worker;
         });
     }
@@ -56,5 +57,9 @@ export class WorkerComponent implements OnInit {
 
   public onNameChange(newName: string) {
     this.workerActions.setName(this.worker.id, newName);
+  }
+
+  public trackByITemId(index: number, item: WorkerItem) {
+    return item.id;
   }
 }
